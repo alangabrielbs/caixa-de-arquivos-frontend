@@ -37,8 +37,8 @@ export default createGlobalStyle`
   }
 
   .rounded {
-      text-align: center;
-      border-radius: 8px;
+      text-align: left;
+      border-radius: 4px;
     }
 
   .rounded.success {

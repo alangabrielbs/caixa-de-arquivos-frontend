@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import toastMessage from '../../utils/toastMessage';
+
 import { setTokenLocalStorage } from '../../utils/localStorage';
+import toastMessage from '../../utils/toastMessage';
 
 import api from '../../services/api';
 
@@ -19,37 +20,54 @@ import {
   WrapperImage,
 } from './styles';
 
-export default function Login() {
-  const { register, errors, handleSubmit } = useForm();
+export default function Register() {
   const history = useHistory();
+  const { register, errors, handleSubmit } = useForm();
 
-  const handleLogin = async ({ email, password }) => {
+  const handleRegister = async ({ name, email, password }) => {
     try {
+      await api.post('/users', { name, email, password });
+
       const response = await api.post('/sessions', { email, password });
       setTokenLocalStorage(response.data.token);
       history.push('/');
+
+      toastMessage('success', `Bem vindo, ${name}!`, 'top-right');
     } catch (err) {
       toastMessage('error', err.response.data.error, 'top-right');
     }
   };
 
-  const onSubmit = (data) => handleLogin(data);
+  const onSubmit = (data) => handleRegister(data);
 
   return (
     <Container>
+      <WrapperImage />
       <WrapperForm>
         <ContentForm>
-          <Link to="/">
+          <Link to="/login">
             <Logo />
           </Link>
-          <h3>Acesse</h3>
+          <h3>Registre-se</h3>
           <p>
-            sua conta do Dropbox ou{' '}
-            <Link to="/registrar">
-              <span>crie uma nova conta</span>
+            ou{' '}
+            <Link to="/login">
+              <span>acesse sua conta</span>
             </Link>
           </p>
           <Form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              type="text"
+              name="name"
+              placeholder="Nome"
+              register={register}
+              pattern={{
+                value: /^[a-zA-Z\u00C0-\u00FF]+\s[a-zA-Z\u00C0-\u00FF](([',. -][a-zA-Z\u00C0-\u00FF ])?[a-zA-Z\u00C0-\u00FF]*)*$/,
+                message: 'Informe seu nome completo',
+              }}
+              required="Nome é obrigatório"
+              error={errors.name}
+            />
             <Input
               type="text"
               name="email"
@@ -67,15 +85,18 @@ export default function Login() {
               name="password"
               placeholder="Senha"
               register={register}
-              required="Senha é obrigatório"
+              minLength={{
+                value: 6,
+                message: 'Senha deve ter no mínimo 6 caracteres',
+              }}
+              required="Confirmar a senha é obrigatório"
               error={errors.password}
             />
 
-            <Button>Acessar</Button>
+            <Button>Registra-se</Button>
           </Form>
         </ContentForm>
       </WrapperForm>
-      <WrapperImage />
     </Container>
   );
 }

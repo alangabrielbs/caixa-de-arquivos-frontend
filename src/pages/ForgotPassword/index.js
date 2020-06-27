@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+
 import toastMessage from '../../utils/toastMessage';
-import { setTokenLocalStorage } from '../../utils/localStorage';
 
 import api from '../../services/api';
 
@@ -19,35 +19,32 @@ import {
   WrapperImage,
 } from './styles';
 
-export default function Login() {
+export default function ForgotPassword() {
   const { register, errors, handleSubmit } = useForm();
-  const history = useHistory();
 
-  const handleLogin = async ({ email, password }) => {
+  const handleForgot = async ({ email }) => {
     try {
-      const response = await api.post('/sessions', { email, password });
-      setTokenLocalStorage(response.data.token);
-      history.push('/');
+      const response = await api.post('/passwords/forgot', { email });
+      toastMessage('success', response.data.message, 'top-right');
     } catch (err) {
       toastMessage('error', err.response.data.error, 'top-right');
     }
   };
 
-  const onSubmit = (data) => handleLogin(data);
+  const onSubmit = (data) => handleForgot(data);
 
   return (
     <Container>
+      <WrapperImage />
       <WrapperForm>
         <ContentForm>
-          <Link to="/">
+          <Link to="/login">
             <Logo />
           </Link>
-          <h3>Acesse</h3>
+          <h3>Esqueceu sua senha?</h3>
           <p>
-            sua conta do Dropbox ou{' '}
-            <Link to="/registrar">
-              <span>crie uma nova conta</span>
-            </Link>
+            Digite seu endereço de e-mail para redefinir a senha. Talvez você
+            precise verificar sua pasta de spams
           </p>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Input
@@ -62,20 +59,11 @@ export default function Login() {
               required="E-mail é obrigatório"
               error={errors.email}
             />
-            <Input
-              type="password"
-              name="password"
-              placeholder="Senha"
-              register={register}
-              required="Senha é obrigatório"
-              error={errors.password}
-            />
 
-            <Button>Acessar</Button>
+            <Button>Enviar</Button>
           </Form>
         </ContentForm>
       </WrapperForm>
-      <WrapperImage />
     </Container>
   );
 }

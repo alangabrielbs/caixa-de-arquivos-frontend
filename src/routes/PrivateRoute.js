@@ -3,7 +3,6 @@ import { isBefore } from 'date-fns';
 import { Route, Redirect } from 'react-router-dom';
 
 import {
-  getTokenLocalStorage,
   getExpiredTokenLocalStorage,
   removeTokenLocalStorage,
 } from '../utils/localStorage';

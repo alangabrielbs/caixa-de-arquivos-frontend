@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import bg_login from '../../assets/images/image-login.jpg';
+import bg_register from '../../assets/images/image-register.jpg';
 
 export const Container = styled.div`
   width: 100%;
@@ -13,7 +13,6 @@ export const WrapperForm = styled.div`
   align-items: center;
   height: 100%;
   width: 55%;
-  float: left;
 
   @media (max-width: 890px) {
     width: 100%;
@@ -55,7 +54,8 @@ export const WrapperImage = styled.div`
   display: flex;
   width: 45%;
   height: 100%;
-  background: url(${bg_login}) no-repeat center;
+  background: url(${bg_register}) no-repeat center;
+  float: left;
   background-size: cover;
 
   @media (max-width: 890px) {

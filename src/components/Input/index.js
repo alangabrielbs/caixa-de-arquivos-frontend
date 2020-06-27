@@ -11,6 +11,8 @@ export default function InputBase({
   name,
   error,
   autoComplete,
+  minLength,
+  maxLength,
 }) {
   return (
     <>
@@ -19,7 +21,7 @@ export default function InputBase({
         type={type}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        ref={register({ required, pattern })}
+        ref={register({ required, pattern, minLength, maxLength })}
       />
       {error && <ErrorMessage>{error.message}</ErrorMessage>}
     </>
